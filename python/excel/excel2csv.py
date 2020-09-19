@@ -9,20 +9,20 @@ import openpyxl as px
 def main():
 
     args = sys.argv
-    excelFile = ''
-    csvFile = ''
+    excelFilepath = ''
+    csvName = ''
     sheetName = ''
 
     if len(args) < 2:
-        print ('USAGE : excel2csv -excel EXCELFILE -csv CSVFILE -sheetName SHEETNAME')
+        print ('USAGE : excel2csv -excel EXCELFILE -csv CSVFILENAME -sheet SHEETNAME')
         sys.exit()
 
     for i in range(len(args)):
         if args[i] == '-excel':
             excelFile = args[i+1]
         if args[i] == '-csv':
-            csvFile = args[i+1]
-        if args[i] == '-sheetName':
+            csvName = args[i+1]
+        if args[i] == '-sheet':
             sheetName = args[i+1]
 
     exfilepath = os.path.abspath(excelFile)
@@ -40,26 +40,29 @@ def main():
             break
 
     if flg == 0:
-        print ('!!!ERROR!!! SHEET NAME', sheetName , ' is not found')
+        print ('!!!ERROR!!! SHEET NAME', sheetName, ' is not found')
         sys.exit()
+    
+    outFileName = sheetName if csvName == '' else csvName
 
-    if csvFile == '':
-        csvFile = exfilepath + '.' + sheetName + '.csv'
+    saveDir = os.path.dirname(exfilepath)
+    if csvName == '':
+        csvName = os.path.join(saveDir, sheetName + '.csv')
     else:
-        csvFile = os.path.dirname(exfilepath) + '/' + csFilef
+        csvName = os.path.join(saveDir, csvName + '.csv')
 
     print ('EXCELFILE : ', exfilepath)
     print ('SHEETNAME : ', sheetName)
-    print ('CSVFILE : ', csvFile)
+    print ('CSVFILE : ', csvName)
 
     workSheet = workBook[sheetName]
 
-    with open(csvFile, 'w', encoding='utf-8') as fp:
-        writer = csv.writer(fp)
+    with open(csvName, 'w', newline='', encoding='utf-8') as fp:
+        writer = csv.writer(fp, lineterminator='\n')
         for cols in workSheet.rows:
             writer.writerow([str(col.value or '') for col in cols])
 
     print ('FINISHED')
 
-if __name__ == '__main__':　
+if __name__ == '__main__':
     main()
