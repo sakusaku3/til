@@ -14,15 +14,15 @@ def main():
     sheetName = ''
 
     if len(args) < 2:
-        print ('USAGE : excel2csv -excel EXCELFILE -csv CSVFILENAME -sheet SHEETNAME')
+        print ('USAGE : excel2csv -e EXCELFILE -c CSVFILENAME -s SHEETNAME')
         sys.exit()
 
     for i in range(len(args)):
-        if args[i] == '-excel':
+        if args[i] == '-e':
             excelFile = args[i+1]
-        if args[i] == '-csv':
+        if args[i] == '-c':
             csvName = args[i+1]
-        if args[i] == '-sheet':
+        if args[i] == '-s':
             sheetName = args[i+1]
 
     exfilepath = os.path.abspath(excelFile)
@@ -44,20 +44,16 @@ def main():
         sys.exit()
     
     outFileName = sheetName if csvName == '' else csvName
-
     saveDir = os.path.dirname(exfilepath)
-    if csvName == '':
-        csvName = os.path.join(saveDir, sheetName + '.csv')
-    else:
-        csvName = os.path.join(saveDir, csvName + '.csv')
+    csvFilepath = os.path.join(saveDir, outFileName + '.csv')
 
     print ('EXCELFILE : ', exfilepath)
     print ('SHEETNAME : ', sheetName)
-    print ('CSVFILE : ', csvName)
+    print ('CSVFILE : ', csvFilepath)
 
     workSheet = workBook[sheetName]
 
-    with open(csvName, 'w', newline='', encoding='utf-8') as fp:
+    with open(csvFilepath, 'w', newline='', encoding='utf-8') as fp:
         writer = csv.writer(fp, lineterminator='\n')
         for cols in workSheet.rows:
             writer.writerow([str(col.value or '') for col in cols])
