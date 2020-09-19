@@ -1,5 +1,15 @@
 
-## Anakonda3コマンドまとめ
+
+## 環境構築
+- Anaconda入れた
+- PATH通した
+```bash:.bash_profile
+ANA_PATH=/cygdrive/c/Anaconda3
+export PATH=\$ANA_PATH:\$ANA_PATH/Library/bin:\$ANA_PATH/Scripts:$PATH
+```
+
+
+## Anaconda3コマンドまとめ
 
 ### よく使う
 - 現在の仮想環境情報
