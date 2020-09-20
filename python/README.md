@@ -44,6 +44,8 @@ conda install mkl=2018.0.2
 ### 参考
 - [globの使い方](https://qiita.com/HirosuguTakeshita/items/0e0850362c7eb3b10ea1)
 
-## 参考
+## その他
 - [ファイル/ディレクトリ操作](https://qiita.com/supersaiakujin/items/12451cd2b8315fe7d054)
 - [python命名規則](https://qiita.com/naomi7325/items/4eb1d2a40277361e898b)
+- [csv読み書き](https://techacademy.jp/magazine/15638)
+- [docstring](https://qiita.com/simonritchie/items/49e0813508cad4876b5a)

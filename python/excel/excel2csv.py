@@ -2,6 +2,7 @@
 import sys
 import os
 import csv
+import glob
 
 import openpyxl as px
 
@@ -9,26 +10,49 @@ def main():
     args = sys.argv
 
     if len(args) < 2:
-        print ('USAGE : excel2csv -e EXCELFILE')
+        print ('USAGE : excel2csv -e EXCELFILE -d DIR')
         sys.exit()
 
     for i in range(len(args)):
         if args[i] == '-e':
-            excel_file = args[i+1]
-
-    exfilepath = os.path.abspath(excel_file)
-
-    if os.path.exists(exfilepath) == False:
-        print ('[ERROR] EXCEL FILE: ', excel_file, ' is not found')
-        sys.exit()
-
-    print ('EXCELFILE : ', exfilepath)
-
-    convert_book_to_csvs(exfilepath)
+            excelfile = args[i+1]
+            convert_book_to_csvs(excelfile)
+        elif args[i] == '-d':
+            exceldir = args[i+1]
+            convert_csvs_to_book(exceldir)
 
     print ('FINISHED')
 
-def convert_book_to_csvs(exfilepath):
+def convert_book_to_csvs(excelfile):
+    """
+    Excelファイルの各シートをcsvへ変換する
+
+    Parameters
+    ----------
+    excelfile : string
+        変換対象のExcelファイルパス
+    """
+
+    abspath = os.path.abspath(excelfile)
+
+    if not os.path.exists(abspath):
+        print ('[ERROR] EXCEL FILE: ', excelfile, ' is not found')
+        sys.exit()
+
+    print ('EXCELFILE : ', abspath)
+
+    convert_book_to_csvs_core(abspath)
+
+def convert_book_to_csvs_core(exfilepath):
+    """
+    Excelファイルの各シートをcsvへ変換する
+
+    Parameters
+    ----------
+    excelfile : string
+        変換対象のExcelファイルパス
+    """
+
     workbook = px.load_workbook(exfilepath, read_only=True, keep_vba=False)
     savedir = os.path.dirname(exfilepath)
 
@@ -42,21 +66,45 @@ def convert_book_to_csvs(exfilepath):
         convert_sheet_to_csv(worksheet, csv_filepath)
         print ('CSVFILE : ', csv_filepath)
 
-def convert_sheet_to_csv(worksheet, save_filepath):
-    rows = enumerate_read_sheet_value_table(worksheet)
-    write_csv(rows, save_filepath, 'utf-8', ',')
+def convert_sheet_to_csv(worksheet, filepath):
+    """
+    Excelファイルのシートをcsvへ変換する
 
-def contains_sheet(workbook, sheetname):
-    for sh in workbook.sheetnames:
-        if sh == sheet:
-            return True
-    return False
+    Parameters
+    ----------
+    worksheet : 
+        ワークシート
+    filepath : string
+        保存ファイルパス
+    """
+    rows = enumerate_read_rows_from_sheet(worksheet)
+    write_csv(rows, filepath, 'utf-8', ',')
 
-def convert_csvs_to_book(excel_filepath, csv_filepaths):
-    workbook = px.load_workbook(excel_filepath)
+def convert_csvs_to_book(exceldir):
+    excelfiles = glob.glob(exceldir + '/*.xlsx')
 
-    for csv_filepath in csv_filepaths:
-        [sheetname, ext] = os.path.splitext(csv_filepath)
+    if not excelfiles:
+        print ('[ERROR] DIRECTORY: ', exceldir, ' is not in excelfile')
+        sys.exit()
+
+    csvfiles = glob.glob(exceldir + '/*.csv')
+
+    if not csvfiles:
+        print ('[ERROR] DIRECTORY: ', exceldir, ' is not in csvfiles')
+        sys.exit()
+
+    abspath = os.path.abspath(excelfiles[0])
+    convert_csvs_to_book_core(abspath, csvfiles)
+
+def convert_csvs_to_book_core(excelfile, csvfiles):
+    """
+    csvファイルリストをExcelファイルへ変換する
+    """
+    workbook = px.load_workbook(excelfile)
+    print ('EXCELFILE : ', excelfile)
+
+    for csvfile in csvfiles:
+        [sheetname, ext] = os.path.splitext(os.path.basename(csvfile))
 
         if contains_sheet(workbook, sheetname):
             worksheet = workbook[sheetname]
@@ -64,24 +112,29 @@ def convert_csvs_to_book(excel_filepath, csv_filepaths):
         else:
             worksheet = workbook.create_sheet(title=sheetname)
 
-        with open(csv_filepath, encoding='utf-8') as fp:
-            reader = csv.reader(fp, delimiter=',')
-            for row in reader:
-                worksheet.append(row)
+        print ('EXCELFILE : ', csvfile)
 
-    workbook.save(excel_filepath)
+        rows = enumerate_read_csv(csvfile, 'utf-8', ',')
+        write_rows_to_sheet(worksheet, rows)
+
+    workbook.save(excelfile)
 
 def clear_sheet(worksheet):
     for row in worksheet.iter_rows():
         for cell in row:
             cell.value = None
 
-def enumerate_read_sheet_value_table(worksheet):
+def enumerate_read_rows_from_sheet(worksheet):
     for cols in worksheet.rows:
         yield [str(col.value or '') for col in cols]
 
-def read_sheet_value_table(worksheet):
-    return [row for row in enumerate_read_sheet_value_table(worksheet)]
+def read_rows_from_sheet(worksheet):
+    return [row for row in enumerate_read_rows_from_sheet(worksheet)]
+
+def write_rows_to_sheet(worksheet, rows, start_row=1, start_col=1):
+    for y, row in enumerate(rows):
+        for x, cell in enumerate(row):
+            worksheet.cell(row=start_row+y, column=start_col+x, value=cell)
 
 def enumerate_read_csv(filepath, encoding, delimiter):
     with open(filepath, encoding=encoding) as fp:
@@ -97,6 +150,12 @@ def write_csv(rows, filepath, encoding, delimiter):
         writer = csv.writer(fp, lineterminator='\n')
         for row in rows:
             writer.writerow(row)
+
+def contains_sheet(workbook, sheetname):
+    for sh in workbook.sheetnames:
+        if sh == sheetname:
+            return True
+    return False
 
 if __name__ == '__main__':
     main()
