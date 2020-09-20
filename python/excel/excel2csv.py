@@ -3,23 +3,22 @@ import sys
 import os
 import csv
 import glob
+import argparse
 
 import openpyxl as px
 
 def main():
-    args = sys.argv
+    parser = argparse.ArgumentParser(description='Excel-CSV間の読み書き')
 
-    if len(args) < 2:
-        print ('USAGE : excel2csv -e EXCELFILE -d DIR')
-        sys.exit()
+    parser.add_argument('arg1', help='e2c or c2e を指定')
+    parser.add_argument('arg2', help='e2c: エクセルファイルを指定, c2e: ディレクトリを指定')
 
-    for i in range(len(args)):
-        if args[i] == '-e':
-            excelfile = args[i+1]
-            convert_book_to_csvs(excelfile)
-        elif args[i] == '-d':
-            exceldir = args[i+1]
-            convert_csvs_to_book(exceldir)
+    args = parser.parse_args()
+
+    if args.arg1 == 'e2c':
+        convert_book_to_csvs(args.arg2)
+    elif args.arg1 == 'c2e':
+        convert_csvs_to_book(args.arg2)
 
     print ('FINISHED')
 
