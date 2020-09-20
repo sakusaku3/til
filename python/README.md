@@ -37,6 +37,13 @@ Intel MKL FATAL ERROR: Cannot load mkl_intel_thread.dll.
 conda install mkl=2018.0.2
 ```
 
+## globモジュール
+- 引数に指定されたパターンにマッチするファイルパスを取得することが出来る
+- 特定のディレクトリに存在するファイルに処理を加えたい場合とか
+
+### 参考
+- [globの使い方](https://qiita.com/HirosuguTakeshita/items/0e0850362c7eb3b10ea1)
 
 ## 参考
 - [ファイル/ディレクトリ操作](https://qiita.com/supersaiakujin/items/12451cd2b8315fe7d054)
+- [python命名規則](https://qiita.com/naomi7325/items/4eb1d2a40277361e898b)
