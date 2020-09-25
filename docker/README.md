@@ -24,3 +24,36 @@ Imageはコンテナの元、Imageからコンテナを起動する
 
 ### Tag
 Imageのバージョンのこと
+
+
+## Docker Desktop for WindowsのProxy設定
+- 「docker deamon」「docker container」の二箇所設定が必要
+- 「docker deamon」は```docker pull```や```docker build```などを実行するdeamonが参照するproxyの設定
+- 「docker container」は```docker run```で起動された、docker container上で走るOSが使うproxyの設定
+
+### docker deamonへの設定
+- [ここ](https://qiita.com/wryun0suke/items/1f4bbd2977ae41ee7a36)参照
+
+### docker containerへの設定
+- config.jsonに追記して、docker clientの設定にproxyを加える
+- windowsの場合、```config.json```は```%USERPROFILE%\.docker\config.json```に配置される
+
+```json:%USERPROFILE%\.docker\config.json
+{
+ "credsStore":"desktop",
+ "stackOrchestrator":"swarm",
+ "proxies":
+ {
+   "default":
+   {
+     "httpProxy": "http://127.0.0.1:3001",
+     "httpsProxy": "http://127.0.0.1:3001",
+     "noProxy": "*.test.example.com,.example2.com"
+   }
+ }
+}
+```
+
+
+### 参考
+- https://qiita.com/2fbCvmiYKX/items/c6aab333364af25fd924
