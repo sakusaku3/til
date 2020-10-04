@@ -54,6 +54,12 @@ Imageのバージョンのこと
 }
 ```
 
-
 ### 参考
 - https://qiita.com/2fbCvmiYKX/items/c6aab333364af25fd924
+
+
+## Dockerにおけるボリュームのマウント
+ホストのボリュームをマウントするには、とりあえずCompose使うのがいいんじゃない
+
+- https://logicoffee.hatenablog.com/entry/2018/06/21/123025
+- https://qiita.com/namutaka/items/f6a574f75f0997a1bb1d
