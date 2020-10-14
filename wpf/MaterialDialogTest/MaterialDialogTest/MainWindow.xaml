@@ -1,0 +1,33 @@
+﻿<Window x:Class="MaterialDialogTest.MainWindow"
+        xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+        xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+        xmlns:local="clr-namespace:MaterialDialogTest"
+        xmlns:material="http://materialdesigninxaml.net/winfx/xaml/themes"
+        mc:Ignorable="d"
+        Title="MainWindow" Height="450" Width="800">
+    <StackPanel>
+        <Button HorizontalAlignment="Center"
+                VerticalAlignment="Center"
+                Click="ButtonMaterialDialog_Click" 
+                Content="Display Dialog" />
+        <material:DialogHost Identifier="MessageDialogHost"/>
+
+        <Button HorizontalAlignment="Center"
+                VerticalAlignment="Center"
+                Click="ButtonSnackBar_Click" 
+                Content="SnackBar from Code Behind"/>
+
+        <material:Snackbar x:Name="Snackbar1"
+                           MessageQueue="{material:MessageQueue}"/>
+
+        <Button HorizontalAlignment="Center"
+                VerticalAlignment="Center"
+                Click="ButtonSnackBar2_Click" 
+                Content="SnackBar from Code Behind"/>
+
+        <material:Snackbar x:Name="Snackbar2"
+                           MessageQueue="{material:MessageQueue}"/>
+    </StackPanel>
+</Window>
