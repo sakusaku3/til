@@ -7,27 +7,36 @@
         xmlns:material="http://materialdesigninxaml.net/winfx/xaml/themes"
         mc:Ignorable="d"
         Title="MainWindow" Height="450" Width="800">
-    <StackPanel>
-        <Button HorizontalAlignment="Center"
+    <Grid x:Name="LayoutRoot">
+        <Border>
+            <Grid>
+                <Grid.RowDefinitions>
+                    <RowDefinition Height="*"/>
+                    <RowDefinition Height="*"/>
+                    <RowDefinition Height="*"/>
+                </Grid.RowDefinitions>
+                <Button Grid.Row="0" HorizontalAlignment="Center"
                 VerticalAlignment="Center"
                 Click="ButtonMaterialDialog_Click" 
                 Content="Display Dialog" />
-        <material:DialogHost Identifier="MessageDialogHost"/>
 
-        <Button HorizontalAlignment="Center"
+                <Button Grid.Row="1" HorizontalAlignment="Center"
                 VerticalAlignment="Center"
                 Click="ButtonSnackBar_Click" 
                 Content="SnackBar from Code Behind"/>
 
-        <material:Snackbar x:Name="Snackbar1"
-                           MessageQueue="{material:MessageQueue}"/>
-
-        <Button HorizontalAlignment="Center"
+                <Button Grid.Row="2" HorizontalAlignment="Center"
                 VerticalAlignment="Center"
                 Click="ButtonSnackBar2_Click" 
                 Content="SnackBar from Code Behind"/>
 
+
+            </Grid>
+        </Border>
+        <material:DialogHost Identifier="MessageDialogHost" CloseOnClickAway="True"/>
+        <material:Snackbar x:Name="Snackbar1"
+                           MessageQueue="{material:MessageQueue}"/>
         <material:Snackbar x:Name="Snackbar2"
                            MessageQueue="{material:MessageQueue}"/>
-    </StackPanel>
+    </Grid>
 </Window>
