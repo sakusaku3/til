@@ -1,4 +1,18 @@
 # docker
+## コマンド
+
+### docker-compose up
+ymlで定義したサービスを開始または再起動する
+
+### docker-compose run
+一度だけなタスクを実行する
+
+- サービス名の指定が必要
+
+### docker-compose start
+すでに作成済みのコンテナを再起動する
+
+
 ## 全体像を把握する
 - [いまさらだけどDockerに入門したので分かりやすくまとめてみた](https://qiita.com/gold-kou/items/44860fbda1a34a001fc1)
 
