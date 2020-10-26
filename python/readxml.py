@@ -1,6 +1,8 @@
 import os
 import glob
 import argparse
+import pygraphviz as pgv
+import networkx as nx
 from xml.etree import ElementTree
 
 def main():
@@ -13,8 +15,13 @@ def main():
     if not os.path.exists(args.arg1):
         print(f'[ERROR] directory not exists {args.arg1}')
     
+    tuples = []
     for filepath in glob.glob(f'{args.arg1}**/*.csproj', recursive=True):
-        readxml_core(filepath)
+        for t in readxml_core(filepath):
+            tuples.append(t)
+
+    print(tuples)
+    write_graph(tuples)
 
     print('FINISHED')
 
@@ -24,9 +31,21 @@ def readxml_core(filepath):
     tree = ElementTree.parse(filepath)
     root = tree.getroot()
 
-    for child in getReferenceNetFramework(root):
-        package_tuple = (filename, child)
-        print(package_tuple)
+    tuples = []
+    if isNetCoreProject(root):
+        for child in getReferenceNetCore(root):
+            yield (filename, child)
+    else:
+        for child in getReferenceNetFramework(root):
+            yield (filename, child)
+
+def write_graph(tuples):
+    G = nx.DiGraph()
+    G.add_edges_from(tuples)
+    nx.nx_agraph.to_agraph(G).draw('G.png', prog='fdp')
+
+def isNetCoreProject(xml_tree_root):
+    return 'Sdk' in xml_tree_root.attrib
 
 def getReferenceNetCore(xml_tree_root):
     for child in xml_tree_root.iter('ProjectReference'):
