@@ -43,3 +43,19 @@ public enum NotifyCollectionChangedAction
     Reset = 4
 }
 ```
+
+## ICommand
+
+```c#
+public interface ICommand
+{
+    /// コマンドを実行する
+    void Execute(object parameter);
+
+    /// コマンドが実行可能な状態にあるかどうかを判定する
+    bool CanExecute(object parameter);
+
+    /// コマンド実行の可否が変化したことを通知するためのイベント
+    event EventHandler CanExecuteChanged;
+}
+```
