@@ -1,5 +1,12 @@
 # git
 
+## 20220717
+### GitHubとの接続
+https://zenn.dev/longbridge/articles/a91089c30851ff
+https://howpon.com/5308
+
+
+
 ## よく調べるコマンド
 
 ### リモートurlを変更する
