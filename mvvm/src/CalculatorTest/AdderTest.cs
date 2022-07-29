@@ -10,15 +10,11 @@ namespace CalculatorTest
         public void Test1()
         {
             var target = new Adder();
+            target.AddNewTerm();
+            target.AddNewTerm();
 
-            var term1 = new Term();
-            term1.Value = 1;
-
-            var term2 = new Term();
-            term2.Value = 2;
-
-            target.Terms.Add(term1);
-            target.Terms.Add(term2);
+            target.Terms[0].Value = 1;
+            target.Terms[1].Value = 2;
 
             target.AddExecute();
 
@@ -31,15 +27,11 @@ namespace CalculatorTest
         public void Test2(int expected, int x, int y)
         {
             var target = new Adder();
+            target.AddNewTerm();
+            target.AddNewTerm();
 
-            var term1 = new Term();
-            term1.Value = x;
-
-            var term2 = new Term();
-            term2.Value = y;
-
-            target.Terms.Add(term1);
-            target.Terms.Add(term2);
+            target.Terms[0].Value = x;
+            target.Terms[1].Value = y;
 
             target.AddExecute();
 

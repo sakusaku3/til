@@ -30,8 +30,13 @@ namespace Calculator.ViewModels
                 nameof(this.model.Result), 
                 () => this.OnPropertyChanged(nameof(this.Result)));
 
-            this.Terms.SynchronizeWith(
-                this.model.Terms,
+            foreach (var item in this.model.Terms)
+            {
+                this.Terms.Add(new TermViewModel(item));
+            }
+
+            this.model.Terms.SynchronizeWith<Term, TermViewModel>(
+                this.Terms,
                 x => new TermViewModel(x));
 
             this.AddCommand = new DelegateCommand(

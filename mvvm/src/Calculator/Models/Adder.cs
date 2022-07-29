@@ -11,8 +11,8 @@ namespace Calculator.Models
         /// <summary>
         /// 項リスト
         /// </summary>
-        public ObservableCollection<Term> Terms { get; } 
-            = new ObservableCollection<Term>();
+        public ReadOnlyObservableCollection<Term> Terms { get; } 
+        private readonly ObservableCollection<Term> _terms;
 
         /// <summary>
         /// 結果
@@ -24,12 +24,18 @@ namespace Calculator.Models
         }
         private int _result;
 
+        public Adder()
+        {
+            this._terms = new ObservableCollection<Term>();
+            this.Terms = new ReadOnlyObservableCollection<Term>(this._terms);
+        }
+
         /// <summary>
         /// 項追加
         /// </summary>
         public void AddNewTerm()
         {
-            this.Terms.Add(new Term());
+            this._terms.Add(new Term());
         }
 
         /// <summary>
@@ -37,8 +43,8 @@ namespace Calculator.Models
         /// </summary>
         public void DeleteTerm()
         {
-            if (!this.Terms.Any()) return;
-            this.Terms.Remove(this.Terms.Last());
+            if (!this._terms.Any()) return;
+            this._terms.Remove(this._terms.Last());
         }
 
         /// <summary>
@@ -47,7 +53,7 @@ namespace Calculator.Models
         /// <returns></returns>
         public bool CanDeleteTerm()
         {
-            return this.Terms.Any();
+            return this._terms.Any();
         }
 
         /// <summary>
@@ -55,7 +61,7 @@ namespace Calculator.Models
         /// </summary>
         public void AddExecute()
         {
-            this.Result = this.Terms.Sum(x => x.Value);
+            this.Result = this._terms.Sum(x => x.Value);
         }
 
         /// <summary>

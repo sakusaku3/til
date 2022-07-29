@@ -1,6 +1,4 @@
-﻿using Calculator.Models;
-
-namespace Calculator.ViewModels
+﻿namespace Calculator.ViewModels
 {
     /// <summary>
     /// 項のViewModel
